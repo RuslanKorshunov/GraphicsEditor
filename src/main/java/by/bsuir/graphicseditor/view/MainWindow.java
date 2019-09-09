@@ -3,13 +3,16 @@ package by.bsuir.graphicseditor.view;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
@@ -26,7 +29,7 @@ public class MainWindow extends Application {
     private static final String X_SECOND_TITLE = "x2";
     private static final String Y_SECOND_TITLE = "y2";
     private static final String COORDINATES_TITLE = "Coordinates";
-    private static final int WIDTH_WINDOW = 400;
+    private static final int WIDTH_WINDOW = 500;
     private static final int HEIGHT_WINDOW = 400;
     private static final int X_COORDINATE = 400;
     private static final int Y_COORDINATE = 100;
@@ -41,7 +44,7 @@ public class MainWindow extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage){
         stage.setTitle(TITLE);
         stage.setWidth(WIDTH_WINDOW);
         stage.setHeight(HEIGHT_WINDOW);
@@ -49,21 +52,12 @@ public class MainWindow extends Application {
         stage.centerOnScreen();
         stage.show();
 
-        Label label = new Label("Hello");
-        Button button = new Button("Click");
-
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                button.setText("Clicked");
-            }
-        });
-
         Pane modePane=createModePanel();
         Chart chart=new Chart();
 
         BorderPane root=new BorderPane();
         root.setCenter(chart);
+        root.setLeft(modePane);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
