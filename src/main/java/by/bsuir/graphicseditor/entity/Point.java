@@ -1,47 +1,57 @@
 package by.bsuir.graphicseditor.entity;
 
 public class Point {
-    private double x;
-    private double y;
-    private double z;
-    private double w;
+    private int coordinateX;
+    private int coordinateY;
+    private int coordinateZ;
+    private int coordinateW;
 
     public Point() {
-        x = 0;
-        y = 0;
-        z = 0;
-        w = 0;
+        coordinateX = 0;
+        coordinateY = 0;
+        coordinateZ = 0;
+        coordinateW = 0;
     }
 
-    public double getX() {
-        return x;
+    public double getCoordinateX() {
+        return coordinateX;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setCoordinateX(int coordinateX) {
+        this.coordinateX = coordinateX;
     }
 
-    public double getY() {
-        return y;
+    public double getCoordinateY() {
+        return coordinateY;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setCoordinateY(int coordinateY) {
+        this.coordinateY = coordinateY;
     }
 
-    public double getZ() {
-        return z;
+    public double getCoordinateZ() {
+        return coordinateZ;
     }
 
-    public void setZ(double z) {
-        this.z = z;
+    public void setCoordinateZ(int coordinateZ) {
+        this.coordinateZ = coordinateZ;
     }
 
-    public double getW() {
-        return w;
+    public double getCoordinateW() {
+        return coordinateW;
     }
 
-    public void setW(double w) {
-        this.w = w;
+    public void setCoordinateW(int coordinateW) {
+        this.coordinateW = coordinateW;
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "coordinateX=" + coordinateX +
+                ", coordinateY=" + coordinateY +
+                ", coordinateZ=" + coordinateZ +
+                ", coordinateW=" + coordinateW +
+                '}';
     }
 }
