@@ -1,20 +1,20 @@
 package by.bsuir.graphicseditor.view;
 
+import by.bsuir.graphicseditor.controller.MainController;
+import by.bsuir.graphicseditor.exception.IncorrectDataException;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class MainWindow extends Application {
     private static final String TITLE = "Graphics Editor";
@@ -29,22 +29,25 @@ public class MainWindow extends Application {
     private static final String X_SECOND_TITLE = "x2";
     private static final String Y_SECOND_TITLE = "y2";
     private static final String COORDINATES_TITLE = "Coordinates";
+    private static final String START_TITLE = "Start";
     private static final int WIDTH_WINDOW = 500;
-    private static final int HEIGHT_WINDOW = 400;
+    private static final int HEIGHT_WINDOW = 600;
     private static final int X_COORDINATE = 400;
     private static final int Y_COORDINATE = 100;
+    private static final int GAP = 10;
+    private MainController controller;
 
     public static void main(String[] args) {
         Application.launch(args);
     }
 
     @Override
-    public void init() throws Exception {
-        super.init();
+    public void init() {
+        controller = new MainController();
     }
 
     @Override
-    public void start(Stage stage){
+    public void start(@NotNull Stage stage) {
         stage.setTitle(TITLE);
         stage.setWidth(WIDTH_WINDOW);
         stage.setHeight(HEIGHT_WINDOW);
@@ -52,12 +55,23 @@ public class MainWindow extends Application {
         stage.centerOnScreen();
         stage.show();
 
-        Pane modePane=createModePanel();
-        Chart chart=new Chart();
+        Pane menuPane = new FlowPane(Orientation.VERTICAL, GAP, GAP);
+        menuPane.setPadding(new Insets(GAP));
+        menuPane.setMaxHeight(Double.MAX_VALUE);
+        menuPane.setMaxWidth(Double.MAX_VALUE);
 
-        BorderPane root=new BorderPane();
+        try {
+            createModePanel(menuPane);
+            createCoordinatesPanel(menuPane);
+        } catch (IncorrectDataException e) {
+            //todo добавить потом
+        }
+
+        Chart chart = new Chart();
+
+        BorderPane root = new BorderPane();
         root.setCenter(chart);
-        root.setLeft(modePane);
+        root.setLeft(menuPane);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -68,15 +82,20 @@ public class MainWindow extends Application {
         super.stop();
     }
 
-    private Pane createModePanel() {
-        Label modeLabel=new Label(MODE_TITLE);
+    @Contract("null -> fail")
+    private void createModePanel(Pane pane) throws IncorrectDataException {
+        if (pane == null) {
+            throw new IncorrectDataException("pane can't be null");
+        }
+
+        Label modeLabel = new Label(MODE_TITLE);
 
         RadioButton modeDDA = new RadioButton(DDA_TITLE);
         modeDDA.fire();
         RadioButton modeBresenham = new RadioButton(BRESENHAM_TITLE);
         RadioButton modeWu = new RadioButton(WU_TITLE);
 
-        ToggleGroup modeGroup=new ToggleGroup();
+        ToggleGroup modeGroup = new ToggleGroup();
         modeDDA.setToggleGroup(modeGroup);
         modeBresenham.setToggleGroup(modeGroup);
         modeWu.setToggleGroup(modeGroup);
@@ -84,17 +103,51 @@ public class MainWindow extends Application {
         modeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-                RadioButton newValue=(RadioButton)t1;
+                RadioButton newValue = (RadioButton) t1;
                 //etc
             }
         });
 
-        FlowPane modePanel=new FlowPane(Orientation.VERTICAL, 10,10);
-        modePanel.setPadding(new Insets(10));
-        modePanel.getChildren().addAll(modeLabel, modeDDA, modeBresenham, modeWu);
-        modePanel.setMaxHeight(Double.MAX_VALUE);
-        modePanel.setMaxWidth(Double.MAX_VALUE);
+        pane.getChildren().addAll(modeLabel, modeDDA, modeBresenham, modeWu);
+    }
 
-        return modePanel;
+    @Contract("null -> fail")
+    private void createCoordinatesPanel(Pane pane) throws IncorrectDataException {
+        if (pane == null) {
+            throw new IncorrectDataException("pane can't be null");
+        }
+
+        Label coordinatesLabel = new Label(COORDINATES_TITLE);
+        Label xFirstLabel = new Label(X_FIRST_TITLE);
+        Label yFirstLabel = new Label(Y_FIRST_TITLE);
+        Label xSecondLabel = new Label(X_SECOND_TITLE);
+        Label ySecondLabel = new Label(Y_SECOND_TITLE);
+
+        TextField xFirstField = new TextField();
+        TextField yFirstField = new TextField();
+        TextField xSecondField = new TextField();
+        TextField ySecondField = new TextField();
+
+        GridPane fields = new GridPane();
+        fields.getColumnConstraints().add(new ColumnConstraints(20));
+        fields.getColumnConstraints().add(new ColumnConstraints(50));
+        fields.add(xFirstLabel, 0, 0);
+        fields.add(xFirstField, 1, 0);
+        fields.add(yFirstLabel, 0, 1);
+        fields.add(yFirstField, 1, 1);
+        fields.add(xSecondLabel, 0, 2);
+        fields.add(xSecondField, 1, 2);
+        fields.add(ySecondLabel, 0, 3);
+        fields.add(ySecondField, 1, 3);
+
+        Button createButton = new Button(START_TITLE);
+        createButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
+
+        pane.getChildren().addAll(coordinatesLabel, fields, createButton);
     }
 }
