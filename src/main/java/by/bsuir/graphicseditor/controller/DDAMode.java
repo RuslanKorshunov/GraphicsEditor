@@ -1,9 +1,9 @@
 package by.bsuir.graphicseditor.controller;
 
-import by.bsuir.graphicseditor.entity.Pixel;
 import by.bsuir.graphicseditor.entity.Point;
 import by.bsuir.graphicseditor.entity.Segment;
 import by.bsuir.graphicseditor.exception.IncorrectDataException;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,34 +18,50 @@ public class DDAMode extends AbstractMode {
             throw new IncorrectDataException("end can't be null");
         }
         Segment segment = new Segment();
-        List<Pixel> pixels = new ArrayList<>();
+        List<Point> points = new ArrayList<>();
+        begin.setColor(Color.BLACK);
+        points.add(begin);
         double deltaX = Math.abs(end.getCoordinateX() - begin.getCoordinateX());
         double deltaY = Math.abs(end.getCoordinateY() - begin.getCoordinateY());
         double length = Math.max(deltaX, deltaY);
-        double dX = deltaX > deltaY ? 1 : deltaX / deltaY;
-        double dY = deltaY > deltaX ? 1 : deltaY / deltaX;
+        double dX = deltaX > deltaY ? 1 : (end.getCoordinateX() - begin.getCoordinateX()) / length;
+        double dY = deltaY > deltaX ? 1 : (end.getCoordinateY() - begin.getCoordinateY()) / length;
 
         Point firstPoint = new Point();
-        int coordinateXFirstPoint = (int) Math.floor(begin.getCoordinateX() + 0.5 * dX);
-        int coordinateYFirstPoint = (int) Math.floor(begin.getCoordinateY() + 0.5 * dY);
+        double xValue = begin.getCoordinateX() + 0.5 * sign(dX);
+        double yValue = begin.getCoordinateY() + 0.5 * sign(dY);
+        int coordinateXFirstPoint = (int) Math.floor(xValue);
+        int coordinateYFirstPoint = (int) Math.floor(yValue);
         firstPoint.setCoordinateX(coordinateXFirstPoint);
         firstPoint.setCoordinateY(coordinateYFirstPoint);
-        Pixel firstPixel = new Pixel();
-        firstPixel.setPoint(firstPoint);
+        firstPoint.setColor(Color.BLACK);
+        points.add(firstPoint);
 
         int i = 1;
         while (i <= length) {
             Point newPoint = new Point();
-            Point oldPoint = pixels.get(i - 1).getPoint();
-            int coordinateX = (int) Math.floor(oldPoint.getCoordinateX() + dX);
-            int coordinateY = (int) Math.floor(oldPoint.getCoordinateY() + dY);
+            xValue += dX;
+            yValue += dY;
+            int coordinateX = (int) Math.floor(xValue);
+            int coordinateY = (int) Math.floor(yValue);
             newPoint.setCoordinateX(coordinateX);
             newPoint.setCoordinateY(coordinateY);
-            Pixel pixel = new Pixel();
-            pixel.setPoint(newPoint);
-            pixels.add(pixel);
+            newPoint.setColor(Color.BLACK);
+            points.add(newPoint);
             i++;
         }
+        segment.addAll(points);
+
         return segment;
+    }
+
+    private int sign(double number) {
+        int result = 0;
+        if (number < 0) {
+            result = -1;
+        } else if (number > 0) {
+            result = 1;
+        }
+        return result;
     }
 }

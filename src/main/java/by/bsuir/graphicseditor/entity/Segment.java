@@ -7,33 +7,35 @@ import java.util.Collection;
 import java.util.List;
 
 public class Segment {
-    private List<Pixel> pixels;
+    private List<Point> points;
 
     public Segment() {
-        pixels = new ArrayList<>();
+        points = new ArrayList<>();
     }
 
-    public boolean add(Pixel pixel) {
-        return pixels.add(pixel);
+    public boolean add(Point pixel) {
+        return points.add(pixel);
     }
 
     public int size() {
-        return pixels.size();
+        return points.size();
     }
 
     public boolean remove(Object o) {
-        return pixels.remove(o);
+        return points.remove(o);
     }
 
-    public Pixel get(int i) {
-        return pixels.get(i);
+    public Point get(int i) {
+        return points.get(i);
     }
 
-    public Pixel set(int i, Pixel pixel) {
-        return pixels.set(i, pixel);
+    public Point set(int i, Point point) {
+        return points.set(i, point);
     }
 
-    public boolean addAll(@NotNull Collection<? extends Pixel> collection) {
-        return pixels.addAll(collection);
+    public boolean addAll(@NotNull Collection<? extends Point> collection) {
+        return points.addAll(collection);
     }
+
+
 }

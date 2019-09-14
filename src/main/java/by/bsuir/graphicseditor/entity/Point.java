@@ -1,19 +1,23 @@
 package by.bsuir.graphicseditor.entity;
 
+import javafx.scene.paint.Color;
+
 public class Point {
+    private Color color;
     private int coordinateX;
     private int coordinateY;
     private int coordinateZ;
     private int coordinateW;
 
     public Point() {
+        color = Color.WHITE;
         coordinateX = 0;
         coordinateY = 0;
         coordinateZ = 0;
         coordinateW = 0;
     }
 
-    public double getCoordinateX() {
+    public int getCoordinateX() {
         return coordinateX;
     }
 
@@ -21,7 +25,7 @@ public class Point {
         this.coordinateX = coordinateX;
     }
 
-    public double getCoordinateY() {
+    public int getCoordinateY() {
         return coordinateY;
     }
 
@@ -29,7 +33,7 @@ public class Point {
         this.coordinateY = coordinateY;
     }
 
-    public double getCoordinateZ() {
+    public int getCoordinateZ() {
         return coordinateZ;
     }
 
@@ -37,7 +41,7 @@ public class Point {
         this.coordinateZ = coordinateZ;
     }
 
-    public double getCoordinateW() {
+    public int getCoordinateW() {
         return coordinateW;
     }
 
@@ -45,10 +49,19 @@ public class Point {
         this.coordinateW = coordinateW;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     @Override
     public String toString() {
         return "Point{" +
-                "coordinateX=" + coordinateX +
+                "color=" + color +
+                ", coordinateX=" + coordinateX +
                 ", coordinateY=" + coordinateY +
                 ", coordinateZ=" + coordinateZ +
                 ", coordinateW=" + coordinateW +
