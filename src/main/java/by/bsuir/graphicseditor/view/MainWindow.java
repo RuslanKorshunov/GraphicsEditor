@@ -5,11 +5,10 @@ import by.bsuir.graphicseditor.controller.ModeName;
 import by.bsuir.graphicseditor.entity.Point;
 import by.bsuir.graphicseditor.entity.Segment;
 import by.bsuir.graphicseditor.exception.IncorrectDataException;
+import by.bsuir.graphicseditor.exception.InternalException;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -40,6 +39,9 @@ public class MainWindow extends Application {
     private static final String COORDINATES_TITLE = "Coordinates";
     private static final String START_TITLE = "Start";
     private static final String TEXT_FIELD = "^\\d+$";
+    private static final String DEBUG_TITLE = "Debug";
+    private static final String FORWARD_TITLE = "Forward";
+    private static final String BACK_TITLE = "Back";
     private static final int WIDTH_WINDOW = 500;
     private static final int HEIGHT_WINDOW = 600;
     private static final int X_COORDINATE = 400;
@@ -47,6 +49,8 @@ public class MainWindow extends Application {
     private static final int GAP = 10;
     private MainController controller;
     private ModeName modeName = ModeName.DDA;
+    private Segment segment;
+    private int step = -1;
 
     private Chart chart;
 
@@ -113,13 +117,10 @@ public class MainWindow extends Application {
         modeBresenham.setToggleGroup(modeGroup);
         modeWu.setToggleGroup(modeGroup);
 
-        modeGroup.selectedToggleProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observableValue, Toggle oldToggle, Toggle newToggle) {
-                RadioButton radioButton = (RadioButton) modeGroup.getSelectedToggle();
-                String radioButtonValue = radioButton.getText().toUpperCase();
-                modeName = ModeName.valueOf(radioButtonValue);
-            }
+        modeGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observableValue, Toggle oldToggle, Toggle newToggle) -> {
+            RadioButton radioButton = (RadioButton) modeGroup.getSelectedToggle();
+            String radioButtonValue = radioButton.getText().toUpperCase();
+            modeName = ModeName.valueOf(radioButtonValue);
         });
 
         pane.getChildren().addAll(modeLabel, modeDDA, modeBresenham, modeWu);
@@ -136,6 +137,7 @@ public class MainWindow extends Application {
         Label yFirstLabel = new Label(Y_FIRST_TITLE);
         Label xSecondLabel = new Label(X_SECOND_TITLE);
         Label ySecondLabel = new Label(Y_SECOND_TITLE);
+        Label debugLabel = new Label(DEBUG_TITLE);
 
         TextField xFirstField = new TextField();
         TextField yFirstField = new TextField();
@@ -159,40 +161,62 @@ public class MainWindow extends Application {
         fields.add(ySecondLabel, 0, 3);
         fields.add(ySecondField, 1, 3);
 
-        Button createButton = new Button(START_TITLE);
-        createButton.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                boolean isCorrect = true;
-                for (TextField textField : textFields) {
-                    if (!textField.getText().matches(TEXT_FIELD)) {
-                        isCorrect = false;
-                    }
-                }
-                if (isCorrect) {
-                    int xFirstCoordinate = Integer.valueOf(xFirstField.getText());
-                    int yFirstCoordinate = Integer.valueOf(yFirstField.getText());
-                    int xSecondCoordinate = Integer.valueOf(xSecondField.getText());
-                    int ySecondCoordinate = Integer.valueOf(ySecondField.getText());
-                    Point begin = new Point();
-                    begin.setCoordinateX(xFirstCoordinate);
-                    begin.setCoordinateY(yFirstCoordinate);
-                    Point end = new Point();
-                    end.setCoordinateX(xSecondCoordinate);
-                    end.setCoordinateY(ySecondCoordinate);
-                    try {
-                        Segment segment = controller.generateSegment(modeName, begin, end);
-                        for (int i = 0; i < segment.size(); i++) {
-                            System.out.println(segment.get(i));
-                        }
-                        chart.setPoints(segment);
-                    } catch (IncorrectDataException e) {
-                        logger.error(e);
-                    }
+        Button forwardButton = new Button(FORWARD_TITLE);
+        forwardButton.setOnAction((ActionEvent actionEvent) -> {
+            if (step == -1) {
+                chart.clearChart();
+                step = 0;
+            }
+            if (step < segment.size() - 1) {
+                step += 1;
+                Point point = segment.get(step);
+                chart.setPoint(point);
+            }
+        });
+
+        Button backButton = new Button(BACK_TITLE);
+        backButton.setOnAction((ActionEvent actionEvent) -> {
+            if (step != -1) {
+                try {
+                    Point point = segment.get(step);
+                    chart.clearPoint(point);
+                    step--;
+                } catch (InternalException e) {
+                    logger.error(e);
                 }
             }
         });
 
-        pane.getChildren().addAll(coordinatesLabel, fields, createButton);
+        Button createButton = new Button(START_TITLE);
+        createButton.setOnAction((ActionEvent actionEvent) -> {
+            boolean isCorrect = true;
+            for (TextField textField : textFields) {
+                if (!textField.getText().matches(TEXT_FIELD)) {
+                    isCorrect = false;
+                }
+            }
+            if (isCorrect) {
+                int xFirstCoordinate = Integer.parseInt(xFirstField.getText());
+                int yFirstCoordinate = Integer.parseInt(yFirstField.getText());
+                int xSecondCoordinate = Integer.parseInt(xSecondField.getText());
+                int ySecondCoordinate = Integer.parseInt(ySecondField.getText());
+                Point begin = new Point();
+                begin.setCoordinateX(xFirstCoordinate);
+                begin.setCoordinateY(yFirstCoordinate);
+                Point end = new Point();
+                end.setCoordinateX(xSecondCoordinate);
+                end.setCoordinateY(ySecondCoordinate);
+                try {
+                    segment = controller.generateSegment(modeName, begin, end);
+                    chart.setPoints(segment);
+                    step = segment.size() - 1;
+                } catch (IncorrectDataException e) {
+                    logger.error(e);
+                }
+            }
+        });
+
+
+        pane.getChildren().addAll(coordinatesLabel, fields, createButton, debugLabel, backButton, forwardButton);
     }
 }

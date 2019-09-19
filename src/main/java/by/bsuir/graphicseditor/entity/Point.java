@@ -2,7 +2,8 @@ package by.bsuir.graphicseditor.entity;
 
 import javafx.scene.paint.Color;
 
-public class Point {
+
+public class Point implements Cloneable {
     private Color color;
     private int coordinateX;
     private int coordinateY;
@@ -55,6 +56,11 @@ public class Point {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    @Override
+    public Point clone() throws CloneNotSupportedException {
+        return (Point) super.clone();
     }
 
     @Override

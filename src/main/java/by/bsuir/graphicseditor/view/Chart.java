@@ -2,7 +2,7 @@ package by.bsuir.graphicseditor.view;
 
 import by.bsuir.graphicseditor.entity.Point;
 import by.bsuir.graphicseditor.entity.Segment;
-import javafx.beans.value.ChangeListener;
+import by.bsuir.graphicseditor.exception.InternalException;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -111,19 +111,16 @@ public class Chart extends BorderPane {
         slider.setBlockIncrement(1);
         slider.setSnapToTicks(true);
 
-        slider.valueProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-                double newIncrease = (double) newValue;
-                if (newIncrease >= -1 && newIncrease <= 1) {
-                    currentIncrease = 1;
-                } else if (newIncrease < 0) {
-                    currentIncrease = 1 / Math.abs(newIncrease);
-                } else {
-                    currentIncrease = newIncrease;
-                }
-                drawShapes();
+        slider.valueProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) -> {
+            double newIncrease = (double) newValue;
+            if (newIncrease >= -1 && newIncrease <= 1) {
+                currentIncrease = 1;
+            } else if (newIncrease < 0) {
+                currentIncrease = 1 / Math.abs(newIncrease);
+            } else {
+                currentIncrease = newIncrease;
             }
+            drawShapes();
         });
 
         setBottom(slider);
@@ -132,16 +129,20 @@ public class Chart extends BorderPane {
     public void setPoints(@NotNull Segment segment) {
         clearChart();
         for (int i = 0; i < segment.size(); i++) {
-            Point pointSegment = segment.get(i);
-            int row = pointSegment.getCoordinateX();
-            int column = pointSegment.getCoordinateY();
-            Color color = pointSegment.getColor();
-            Point point = this.points.get(row).get(column);
-            if (point != null) {
-                point.setColor(color);
-            }
+            Point point = segment.get(i);
+            setPoint(point);
         }
-        drawShapes();
+    }
+
+    public void setPoint(@NotNull Point pointSegment) {
+        int row = pointSegment.getCoordinateX();
+        int column = pointSegment.getCoordinateY();
+        Color color = pointSegment.getColor();
+        Point point = this.points.get(row).get(column);
+        if (point != null) {
+            point.setColor(color);
+            drawShapes();
+        }
     }
 
     public void clearChart() {
@@ -151,5 +152,16 @@ public class Chart extends BorderPane {
             }
         }
         drawShapes();
+    }
+
+    public void clearPoint(@NotNull Point point) throws InternalException {
+        try {
+            Point newPoint = point.clone();
+            newPoint.setColor(Color.WHITE);
+            setPoint(newPoint);
+            drawShapes();
+        } catch (CloneNotSupportedException e) {
+            throw new InternalException(e);
+        }
     }
 }
