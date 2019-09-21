@@ -24,9 +24,9 @@ public class BresenhamMode extends AbstractMode {
         int deltaX = Math.abs(end.getCoordinateX() - begin.getCoordinateX());
         int deltaY = Math.abs(end.getCoordinateY() - begin.getCoordinateY());
         int length = Math.max(deltaX, deltaY);
-        int x = begin.getCoordinateX();
-        int y = begin.getCoordinateY();
-        int e = (deltaY <= deltaX) ? 2 * deltaY - deltaX : 2 * deltaX - deltaY;
+        int coordinateX = begin.getCoordinateX();
+        int coordinateY = begin.getCoordinateY();
+        int error = (deltaY <= deltaX) ? 2 * deltaY - deltaX : 2 * deltaX - deltaY;
         int signX = MathController.sign(end.getCoordinateX() - begin.getCoordinateX());
         int signY = MathController.sign(end.getCoordinateY() - begin.getCoordinateY());
         Point firstPoint = new Point(Color.BLACK, begin.getCoordinateX(), begin.getCoordinateY());
@@ -34,24 +34,24 @@ public class BresenhamMode extends AbstractMode {
 
         int i = 1;
         while (i <= length) {
-            if (e >= 0) {
+            if (error >= 0) {
                 if (deltaX >= deltaY) {
-                    y += signY;
-                    e -= 2 * deltaX;
+                    coordinateY += signY;
+                    error -= 2 * deltaX;
                 } else {
-                    x += signX;
-                    e -= 2 * deltaY;
+                    coordinateX += signX;
+                    error -= 2 * deltaY;
                 }
             }
             if (deltaX >= deltaY) {
-                x += signX;
-                e += 2 * deltaY;
+                coordinateX += signX;
+                error += 2 * deltaY;
             } else {
-                y += signY;
-                e += 2 * deltaX;
+                coordinateY += signY;
+                error += 2 * deltaX;
             }
             i++;
-            Point point = new Point(Color.BLACK, x, y);
+            Point point = new Point(Color.BLACK, coordinateX, coordinateY);
             segment.add(point);
         }
 
