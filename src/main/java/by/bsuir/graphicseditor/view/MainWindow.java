@@ -167,10 +167,10 @@ public class MainWindow extends Application {
                 chart.clearChart();
                 step = 0;
             }
-            if (step < segment.size() - 1) {
-                step += 1;
+            if (step <= segment.size() - 1) {
                 Point point = segment.get(step);
                 chart.setPoint(point);
+                step += 1;
             }
         });
 

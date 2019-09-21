@@ -14,7 +14,14 @@ public class MathController {
         return result;
     }
 
-    public static int sign(double number) {
-        return sign((int)number);
+    @Contract(pure = true)
+    public static double sign(double number) {
+        double result = 0;
+        if (number < 0) {
+            result = 1;
+        } else if (number > 0) {
+            result = 1;
+        }
+        return result;
     }
 }
