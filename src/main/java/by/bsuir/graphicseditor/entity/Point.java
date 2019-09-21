@@ -18,6 +18,12 @@ public class Point implements Cloneable {
         coordinateW = 0;
     }
 
+    public Point(Color color, int coordinateX, int coordinateY) {
+        this.color = color;
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+    }
+
     public int getCoordinateX() {
         return coordinateX;
     }

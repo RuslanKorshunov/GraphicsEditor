@@ -13,8 +13,8 @@ public class Segment {
         points = new ArrayList<>();
     }
 
-    public boolean add(Point pixel) {
-        return points.add(pixel);
+    public boolean add(Point point) {
+        return points.add(point);
     }
 
     public int size() {
