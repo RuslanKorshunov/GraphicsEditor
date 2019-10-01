@@ -6,7 +6,7 @@ public class BresenhamData {
     private int length;
     private int coordinateX;
     private int coordinateY;
-    private int error;
+    private double error;
     private int signX;
     private int signY;
 
@@ -50,11 +50,11 @@ public class BresenhamData {
         this.coordinateY = coordinateY;
     }
 
-    public int getError() {
+    public double getError() {
         return error;
     }
 
-    public void setError(int error) {
+    public void setError(double error) {
         this.error = error;
     }
 

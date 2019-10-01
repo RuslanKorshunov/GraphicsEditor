@@ -18,8 +18,6 @@ public class BresenhamMode extends AbstractMode {
         }
         Segment segment = new Segment();
         BresenhamData bresenhamData = createBresenhamData(begin, end);
-        begin.setColor(Color.BLACK);
-        segment.add(begin);
         segment = generateSegment(bresenhamData, segment);
 
         return segment;
@@ -33,12 +31,29 @@ public class BresenhamMode extends AbstractMode {
         int deltaY = Math.abs(end.getCoordinateY() - begin.getCoordinateY());
         bresenhamData.setDeltaY(deltaY);
         int length = Math.max(deltaX, deltaY);
+
+        if (deltaX >= deltaY) {
+            if (!(end.getCoordinateY() - begin.getCoordinateY() <= 0 && end.getCoordinateX() - begin.getCoordinateX() <= 0) &&
+                    !(end.getCoordinateY() - begin.getCoordinateY() <= 0 && end.getCoordinateX() - begin.getCoordinateX() >= 0)) {
+                Point pointTemporary = begin;
+                begin = end;
+                end = pointTemporary;
+            }
+        } else {
+            if (!(end.getCoordinateY() - begin.getCoordinateY() >= 0 && end.getCoordinateX() - begin.getCoordinateX() >= 0) &&
+                    !(end.getCoordinateY() - begin.getCoordinateY() <= 0 && end.getCoordinateX() - begin.getCoordinateX() >= 0)) {
+                Point pointTemporary = begin;
+                begin = end;
+                end = pointTemporary;
+            }
+        }
+
         bresenhamData.setLength(length);
         int coordinateX = begin.getCoordinateX();
         bresenhamData.setCoordinateX(coordinateX);
         int coordinateY = begin.getCoordinateY();
         bresenhamData.setCoordinateY(coordinateY);
-        int error = (deltaY <= deltaX) ? 2 * deltaY - deltaX : 2 * deltaX - deltaY;
+        double error = (deltaY <= deltaX) ? (double) deltaY / deltaX - 0.5 : (double) deltaX / deltaY - 0.5;
         bresenhamData.setError(error);
         int signX = MathController.sign(end.getCoordinateX() - begin.getCoordinateX());
         bresenhamData.setSignX(signX);
@@ -56,7 +71,7 @@ public class BresenhamMode extends AbstractMode {
             throw new IncorrectDataException("segment can't be null");
         }
         int length = bresenhamData.getLength();
-        int error = bresenhamData.getError();
+        double error = bresenhamData.getError();
         int deltaX = bresenhamData.getDeltaX();
         int deltaY = bresenhamData.getDeltaY();
         int coordinateX = bresenhamData.getCoordinateX();
@@ -65,26 +80,28 @@ public class BresenhamMode extends AbstractMode {
         int signY = bresenhamData.getSignY();
         int i = 1;
         while (i <= length) {
-            if (error >= 0) {
+            Point point = new Point(Color.BLACK, coordinateX, coordinateY);
+            segment.add(point);
+            while (error >= 0) {
                 if (deltaX >= deltaY) {
                     coordinateY += signY;
-                    error -= 2 * deltaX;
+                    error -= 1;
                 } else {
                     coordinateX += signX;
-                    error -= 2 * deltaY;
+                    error -= 1;
                 }
             }
             if (deltaX >= deltaY) {
                 coordinateX += signX;
-                error += 2 * deltaY;
+                error += (double) deltaY / deltaX;
             } else {
                 coordinateY += signY;
-                error += 2 * deltaX;
+                error += (double) deltaX / deltaY;
             }
             i++;
-            Point point = new Point(Color.BLACK, coordinateX, coordinateY);
-            segment.add(point);
         }
+        Point point = new Point(Color.BLACK, coordinateX, coordinateY);
+        segment.add(point);
         return segment;
     }
 }

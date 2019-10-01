@@ -42,8 +42,9 @@ public class Chart extends BorderPane {
     private void drawShapes() {
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         gc.setFill(Color.WHITE);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(0.5);
+        gc.setStroke(Color.LIGHTGRAY);
+        double width = currentIncrease < 0 ? 0.5 / Math.abs(currentIncrease) : 0.5;
+        gc.setLineWidth(width);
         int row = 0;
         for (double i = RECTANGLE_SIDE * currentIncrease; i < HEIGHT; i += RECTANGLE_SIDE * currentIncrease, row++) {
             int column = 0;
@@ -73,8 +74,8 @@ public class Chart extends BorderPane {
                 }
             }
         }
-        drawAbscissa();
-        drawOrdinate();
+//        drawAbscissa();
+//        drawOrdinate();
     }
 
     private void drawAbscissa() {
