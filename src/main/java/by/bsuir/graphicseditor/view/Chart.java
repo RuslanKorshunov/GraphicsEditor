@@ -17,9 +17,9 @@ import java.util.List;
 public class Chart extends BorderPane {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 300;
-    private static final double RECTANGLE_SIDE = 20;
-    private static final double MAX_INCREASE = 5;
-    private static final double MIN_INCREASE = -5;
+    private static final double RECTANGLE_SIDE = 1;
+    private static final double MAX_INCREASE = 9;
+    private static final double MIN_INCREASE = 1;
     private double currentIncrease = 1;
 
     private Canvas canvas;
@@ -42,7 +42,7 @@ public class Chart extends BorderPane {
     private void drawShapes() {
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         gc.setFill(Color.WHITE);
-        gc.setStroke(Color.LIGHTGRAY);
+        gc.setStroke(Color.WHITE);
         double width = currentIncrease < 0 ? 0.5 / Math.abs(currentIncrease) : 0.5;
         gc.setLineWidth(width);
         int row = 0;
