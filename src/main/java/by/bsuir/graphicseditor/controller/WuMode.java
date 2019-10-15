@@ -25,37 +25,42 @@ public class WuMode extends BresenhamMode {
             double error = (deltaY <= deltaX) ? (double) deltaY / deltaX : (double) deltaX / deltaY;
             int coordinateX = bresenhamData.getCoordinateX();
             int coordinateY = bresenhamData.getCoordinateY();
-            int coordinateXAdditional = (deltaX >= deltaY) ? coordinateX : coordinateX - 1;
-            int coordinateYAdditional = (deltaY > deltaX) ? coordinateY : coordinateY + 1;
             int signX = bresenhamData.getSignX();
             int signY = bresenhamData.getSignY();
             int i = 1;
             while (i <= length) {
                 Point point = new Point(Color.BLACK, coordinateX, coordinateY);
                 segment.add(point);
-                if (coordinateXAdditional >= 0 && coordinateYAdditional >= 0) {
-                    Point pointAdd = new Point(findColor(1 - error), coordinateXAdditional, coordinateYAdditional);
-                    segment.add(pointAdd);
-                }
                 if (error >= 0.5) {
                     if (deltaX >= deltaY) {
                         coordinateY += signY;
-                        coordinateYAdditional += signY;
                         error -= 1;
                     } else {
                         coordinateX += signX;
-                        coordinateXAdditional += signX;
                         error -= 1;
                     }
                 }
                 if (deltaX >= deltaY) {
                     coordinateX += signX;
-                    coordinateXAdditional += signX;
                     error += (double) deltaY / deltaX;
                 } else {
                     coordinateY += signY;
-                    coordinateYAdditional += signY;
                     error += (double) deltaX / deltaY;
+                }
+                if (deltaX >= deltaY) {
+                    if (coordinateY - 1 >= 0) {
+                        Point pointAddFirst = new Point(findColor(1 - error), coordinateX, coordinateY - 1);
+                        segment.add(pointAddFirst);
+                    }
+                    Point pointAddSecond = new Point(findColor(error), coordinateX, coordinateY + 1);
+                    segment.add(pointAddSecond);
+                } else {
+                    if (coordinateX - 1 >= 0) {
+                        Point pointAddFirst = new Point(findColor(error), coordinateX - 1, coordinateY);
+                        segment.add(pointAddFirst);
+                    }
+                    Point pointAddSecond = new Point(findColor(1 - error), coordinateX + 1, coordinateY);
+                    segment.add(pointAddSecond);
                 }
                 i++;
             }
@@ -66,20 +71,12 @@ public class WuMode extends BresenhamMode {
     }
 
     private Color findColor(double error) {
-        Color color = null;
-        if (error >= 0.9) {
-            color = Color.rgb(105, 105, 105, 0.99);
-        } else if (error >= 0.7 && error < 0.9) {
-            color = Color.rgb(128, 128, 128, 0.99);
-        } else if (error >= 0.6 && error < 0.7) {
-            color = Color.rgb(169, 169, 169, 0.99);
-        } else if (error >= 0.4 && error < 0.6) {
-            color = Color.rgb(192, 192, 192, 0.99);
-        } else if (error >= 0.1 && error < 0.4) {
-            color = Color.rgb(211, 211, 211, 0.99);
-        } else if (error < 0.1) {
-            color = Color.rgb(220, 220, 220, 0.99);
+        if (error <= 0) {
+            error = 0;
         }
-        return color;
+        if (error > 1) {
+            error = 1;
+        }
+        return Color.gray(error);
     }
 }
