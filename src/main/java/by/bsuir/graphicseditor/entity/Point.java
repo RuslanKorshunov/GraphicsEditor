@@ -1,47 +1,82 @@
 package by.bsuir.graphicseditor.entity;
 
-public class Point {
-    private double x;
-    private double y;
-    private double z;
-    private double w;
+import javafx.scene.paint.Color;
+
+
+public class Point implements Cloneable {
+    private Color color;
+    private int coordinateX;
+    private int coordinateY;
+    private int coordinateZ;
+    private int coordinateW;
 
     public Point() {
-        x = 0;
-        y = 0;
-        z = 0;
-        w = 0;
+        color = Color.WHITE;
+        coordinateX = 0;
+        coordinateY = 0;
+        coordinateZ = 0;
+        coordinateW = 0;
     }
 
-    public double getX() {
-        return x;
+    public Point(Color color, int coordinateX, int coordinateY) {
+        this.color = color;
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public int getCoordinateX() {
+        return coordinateX;
     }
 
-    public double getY() {
-        return y;
+    public void setCoordinateX(int coordinateX) {
+        this.coordinateX = coordinateX;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public int getCoordinateY() {
+        return coordinateY;
     }
 
-    public double getZ() {
-        return z;
+    public void setCoordinateY(int coordinateY) {
+        this.coordinateY = coordinateY;
     }
 
-    public void setZ(double z) {
-        this.z = z;
+    public int getCoordinateZ() {
+        return coordinateZ;
     }
 
-    public double getW() {
-        return w;
+    public void setCoordinateZ(int coordinateZ) {
+        this.coordinateZ = coordinateZ;
     }
 
-    public void setW(double w) {
-        this.w = w;
+    public int getCoordinateW() {
+        return coordinateW;
+    }
+
+    public void setCoordinateW(int coordinateW) {
+        this.coordinateW = coordinateW;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    @Override
+    public Point clone() throws CloneNotSupportedException {
+        return (Point) super.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "color=" + color +
+                ", coordinateX=" + coordinateX +
+                ", coordinateY=" + coordinateY +
+                ", coordinateZ=" + coordinateZ +
+                ", coordinateW=" + coordinateW +
+                '}';
     }
 }
