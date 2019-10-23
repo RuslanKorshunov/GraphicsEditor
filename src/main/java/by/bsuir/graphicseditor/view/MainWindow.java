@@ -1,6 +1,7 @@
 package by.bsuir.graphicseditor.view;
 
 import by.bsuir.graphicseditor.view.panel.AbstractPanel;
+import by.bsuir.graphicseditor.view.panel.SecondOrderLinePanel;
 import by.bsuir.graphicseditor.view.panel.SegmentPanel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -27,6 +28,7 @@ public class MainWindow extends Application {
     private static final int HEIGHT_WINDOW = 600;
     private static final int GAP = 10;
     private AbstractPanel segmentPanel;
+    private AbstractPanel secondOrderLinePanel;
 
     private BorderPane root;
 
@@ -80,6 +82,10 @@ public class MainWindow extends Application {
         });
         MenuItem circleItem = new MenuItem(CIRCLE_TITLE);
         circleItem.setOnAction((ActionEvent event) -> {
+            if (secondOrderLinePanel == null) {
+                secondOrderLinePanel = new SecondOrderLinePanel();
+            }
+            root.setCenter(secondOrderLinePanel);
         });
         MenuItem infoItem = new MenuItem(INFO_TITLE);
         infoItem.setOnAction((ActionEvent event) -> {

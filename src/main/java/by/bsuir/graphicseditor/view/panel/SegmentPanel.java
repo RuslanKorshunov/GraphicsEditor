@@ -1,17 +1,16 @@
 package by.bsuir.graphicseditor.view.panel;
 
 import by.bsuir.graphicseditor.controller.MainController;
-import by.bsuir.graphicseditor.controller.ModeName;
 import by.bsuir.graphicseditor.entity.Point;
 import by.bsuir.graphicseditor.entity.Segment;
 import by.bsuir.graphicseditor.exception.IncorrectDataException;
 import by.bsuir.graphicseditor.exception.InternalException;
+import by.bsuir.graphicseditor.mode.ModeName;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -29,11 +28,6 @@ public class SegmentPanel extends AbstractPanel {
     private static final String Y_FIRST_TITLE = "y1";
     private static final String X_SECOND_TITLE = "x2";
     private static final String Y_SECOND_TITLE = "y2";
-    private static final String DEBUG_TITLE = "Debug";
-    private static final String FORWARD_TITLE = "Forward";
-    private static final String BACK_TITLE = "Back";
-    private static final String START_TITLE = "Start";
-    private static final String TEXT_FIELD = "^\\d+$";
 
     private MainController controller;
     private Segment segment;
@@ -46,16 +40,16 @@ public class SegmentPanel extends AbstractPanel {
         controller = new MainController();
         modeName = ModeName.DDA;
         try {
-            createModePanel(menuPane);
-            createCoordinatesPanel(menuPane);
+            createModePanel();
+            createCoordinatesPanel();
         } catch (IncorrectDataException e) {
             logger.error(e);
         }
     }
 
     @Contract("null -> fail")
-    private void createModePanel(Pane pane) throws IncorrectDataException {
-        if (pane == null) {
+    private void createModePanel() throws IncorrectDataException {
+        if (menuPane == null) {
             throw new IncorrectDataException("pane can't be null");
         }
 
@@ -77,12 +71,12 @@ public class SegmentPanel extends AbstractPanel {
             modeName = ModeName.valueOf(radioButtonValue);
         });
 
-        pane.getChildren().addAll(modeLabel, modeDDA, modeBresenham, modeWu);
+        menuPane.getChildren().addAll(modeLabel, modeDDA, modeBresenham, modeWu);
     }
 
     @Contract("null -> fail")
-    private void createCoordinatesPanel(Pane pane) throws IncorrectDataException {
-        if (pane == null) {
+    private void createCoordinatesPanel() throws IncorrectDataException {
+        if (menuPane == null) {
             throw new IncorrectDataException("pane can't be null");
         }
 
@@ -171,6 +165,6 @@ public class SegmentPanel extends AbstractPanel {
         });
 
 
-        pane.getChildren().addAll(coordinatesLabel, fields, createButton, debugLabel, backButton, forwardButton);
+        menuPane.getChildren().addAll(coordinatesLabel, fields, createButton, debugLabel, backButton, forwardButton);
     }
 }

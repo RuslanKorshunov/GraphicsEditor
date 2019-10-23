@@ -1,5 +1,7 @@
-package by.bsuir.graphicseditor.controller;
+package by.bsuir.graphicseditor.mode.segmentmode;
 
+import by.bsuir.graphicseditor.mode.AbstractMode;
+import by.bsuir.graphicseditor.controller.MathController;
 import by.bsuir.graphicseditor.entity.BresenhamData;
 import by.bsuir.graphicseditor.entity.Point;
 import by.bsuir.graphicseditor.entity.Segment;

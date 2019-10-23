@@ -1,4 +1,4 @@
-package by.bsuir.graphicseditor.controller;
+package by.bsuir.graphicseditor.mode.segmentmode;
 
 import by.bsuir.graphicseditor.entity.BresenhamData;
 import by.bsuir.graphicseditor.entity.Point;
