@@ -9,12 +9,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Chart extends BorderPane {
+    private static final Logger logger = LogManager.getLogger(Chart.class);
     private static final int WIDTH = 300;
     private static final int HEIGHT = 300;
     private static final double RECTANGLE_SIDE = 1;
@@ -131,7 +134,12 @@ public class Chart extends BorderPane {
         clearChart();
         for (int i = 0; i < segment.size(); i++) {
             Point point = segment.get(i);
-            setPoint(point);
+            if (point.getCoordinateX() >= 0 && point.getCoordinateY() >= 0 &&
+                    point.getCoordinateX() < WIDTH && point.getCoordinateY() < HEIGHT) {
+                setPoint(point);
+            } else {
+                logger.warn(point+" wasn't showed because its coordinates out of range.");
+            }
         }
     }
 

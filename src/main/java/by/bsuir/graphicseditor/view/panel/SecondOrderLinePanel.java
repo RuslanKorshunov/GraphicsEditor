@@ -127,11 +127,11 @@ public class SecondOrderLinePanel extends AbstractPanel {
                 textFields.add(radiusField);
 
                 fields.add(xLabel, 0, 0);
-                fields.add(xField, 0, 1);
-                fields.add(yLabel, 1, 0);
+                fields.add(xField, 1, 0);
+                fields.add(yLabel, 0, 1);
                 fields.add(yField, 1, 1);
-                fields.add(radiusField, 2, 0);
-                fields.add(radiusField, 2, 1);
+                fields.add(radiusLabel, 0, 2);
+                fields.add(radiusField, 1, 2);
 
                 createButton.setOnAction((ActionEvent actionEvent) -> {
                     boolean isCorrect = true;
