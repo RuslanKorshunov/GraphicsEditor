@@ -4,5 +4,6 @@ public enum ModeName {
     DDA,
     BRESENHAM,
     WU,
-    CIRCLE;
+    CIRCLE,
+    ELLIPSE;
 }

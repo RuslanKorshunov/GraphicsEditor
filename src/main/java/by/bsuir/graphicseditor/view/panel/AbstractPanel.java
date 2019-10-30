@@ -8,7 +8,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
 public abstract class AbstractPanel extends BorderPane {
-    private static final int GAP = 10;
+    protected static final int GAP = 10;
     protected static final String MODE_TITLE = "Modes";
     protected static final String DEBUG_TITLE = "Debug";
     protected static final String FORWARD_TITLE = "Forward";

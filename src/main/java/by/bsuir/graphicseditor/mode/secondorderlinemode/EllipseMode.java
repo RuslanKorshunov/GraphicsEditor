@@ -6,49 +6,50 @@ import by.bsuir.graphicseditor.exception.IncorrectDataException;
 import by.bsuir.graphicseditor.mode.AbstractMode;
 import javafx.scene.paint.Color;
 
-public class CircleMode extends AbstractMode {
+public class EllipseMode extends AbstractMode {
     @Override
     public Segment generateSegment(Point center, int... parameters) throws IncorrectDataException {
         if (center == null || parameters == null || parameters.length == 0) {
             throw new IncorrectDataException("parameters has invalid value");
         }
-        int R = parameters[0];
+        int a = parameters[0];
+        int b = parameters[1];
         int xCenter = center.getCoordinateX();
         int yCenter = center.getCoordinateY();
         int x = 0;
-        int y = R;
+        int y = b;
         int limit = 0;
-        int error = 2 * (1 - R);
+        int error = a * a + b * b - 2 * a * a * b;
         Segment segment = new Segment();
-        Point firstPoint = new Point(Color.BLACK, xCenter, yCenter + R);
-        Point firstPointReverse = new Point(Color.BLACK, xCenter, yCenter - R);
+        Point firstPoint = new Point(Color.BLACK, xCenter, yCenter + b);
+        Point firstPointReverse = new Point(Color.BLACK, xCenter, yCenter - b);
         segment.add(firstPoint);
         segment.add(firstPointReverse);
         while (y > limit) {
             if (error > 0) {
-                int delta = 2 * error - 2 * x - 1;
+                int delta = 2 * (error - b * b * x) - 1;
                 if (delta > 0) {
                     y--;
-                    error += 1 - 2 * y;
+                    error += a * a * (1 - 2 * y);
                 } else {
                     x++;
                     y--;
-                    error += 2 * x - 2 * y + 2;
+                    error += b * b * (2 * x + 1) + a * a * (1 - 2 * y);
                 }
             } else if (error < 0) {
-                int delta = 2 * error + 2 * y - 1;
+                int delta = 2 * (error + a * a * y) - 1;
                 if (delta > 0) {
                     x++;
                     y--;
-                    error += 2 * x - 2 * y + 2;
+                    error += b * b * (2 * x + 1) + a * a * (1 - 2 * y);
                 } else {
                     x++;
-                    error += 2 * x + 1;
+                    error += b * b * (2 * x + 1);
                 }
             } else {
                 x++;
                 y--;
-                error += 2 * x - 2 * y + 2;
+                error += b * b * (2 * x + 1) + a * a * (1 - 2 * y);
             }
             Point pointFirstOctant = new Point(Color.BLACK, xCenter + x, yCenter + y);
             Point pointSecondOctant = new Point(Color.BLACK, xCenter - x, yCenter + y);
