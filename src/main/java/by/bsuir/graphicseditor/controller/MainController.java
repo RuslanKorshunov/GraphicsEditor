@@ -7,6 +7,7 @@ import by.bsuir.graphicseditor.mode.AbstractMode;
 import by.bsuir.graphicseditor.mode.ModeName;
 import by.bsuir.graphicseditor.mode.secondorderlinemode.CircleMode;
 import by.bsuir.graphicseditor.mode.secondorderlinemode.EllipseMode;
+import by.bsuir.graphicseditor.mode.secondorderlinemode.ParabolaMode;
 import by.bsuir.graphicseditor.mode.segmentmode.BresenhamMode;
 import by.bsuir.graphicseditor.mode.segmentmode.DDAMode;
 import by.bsuir.graphicseditor.mode.segmentmode.WuMode;
@@ -42,6 +43,9 @@ public class MainController {
                 break;
             case ELLIPSE:
                 mode = new EllipseMode();
+                break;
+            case PARABOLA:
+                mode = new ParabolaMode();
                 break;
             default:
                 throw new IncorrectDataException("modeName has incorrect value");

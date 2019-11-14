@@ -5,5 +5,6 @@ public enum ModeName {
     BRESENHAM,
     WU,
     CIRCLE,
-    ELLIPSE;
+    ELLIPSE,
+    PARABOLA;
 }

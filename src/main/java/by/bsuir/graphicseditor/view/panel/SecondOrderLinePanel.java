@@ -25,12 +25,14 @@ public class SecondOrderLinePanel extends AbstractPanel {
     private static final Logger logger = LogManager.getLogger(SecondOrderLinePanel.class);
     private static final String CIRCLE_TITLE = "Circle";
     private static final String ELLIPSE_TITLE = "Ellipse";
+    private static final String PARABOLA_TITLE = "Parabola";
     private static final String PARAMETERS_TITLE = "Parameters";
     private static final String X_TITLE = "x";
     private static final String Y_TITLE = "y";
     private static final String R_TITLE = "R";
     private static final String A_TITLE = "a";
     private static final String B_TITLE = "b";
+    private static final String P_TITLE = "p";
 
     private MainController controller;
     private Pane modePane;
@@ -63,10 +65,12 @@ public class SecondOrderLinePanel extends AbstractPanel {
         RadioButton modeCircle = new RadioButton(CIRCLE_TITLE);
         modeCircle.fire();
         RadioButton modeEllipse = new RadioButton(ELLIPSE_TITLE);
+        RadioButton modeParabola = new RadioButton(PARABOLA_TITLE);
 
         ToggleGroup modeGroup = new ToggleGroup();
         modeCircle.setToggleGroup(modeGroup);
         modeEllipse.setToggleGroup(modeGroup);
+        modeParabola.setToggleGroup(modeGroup);
 
         modeGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observableValue, Toggle oldToggle, Toggle newToggle) -> {
             try {
@@ -79,7 +83,7 @@ public class SecondOrderLinePanel extends AbstractPanel {
             }
         });
 
-        modePane.getChildren().addAll(modeLabel, modeCircle, modeEllipse);
+        modePane.getChildren().addAll(modeLabel, modeCircle, modeEllipse, modeParabola);
         menuPane.getChildren().addAll(modePane);
     }
 
@@ -200,6 +204,38 @@ public class SecondOrderLinePanel extends AbstractPanel {
                         center.setCoordinateY(yCoordinate);
                         try {
                             segment = controller.generateSecondOrderLine(modeName, center, a, b);
+                            chart.setPoints(segment);
+                            step = segment.size() - 1;
+                        } catch (IncorrectDataException e) {
+                            logger.error(e);
+                        }
+                    }
+                });
+                break;
+            case PARABOLA:
+                Label pLabel = new Label(P_TITLE);
+
+                TextField pField = new TextField();
+
+                fields.add(pLabel, 0, 2);
+                fields.add(pField, 1, 2);
+
+                createButton.setOnAction((ActionEvent event) -> {
+                    boolean isCorrect = true;
+                    for (TextField textField : textFields) {
+                        if (!textField.getText().matches(TEXT_FIELD)) {
+                            isCorrect = false;
+                        }
+                    }
+                    if (isCorrect) {
+                        int xCoordinate = Integer.parseInt(xField.getText());
+                        int yCoordinate = Integer.parseInt(yField.getText());
+                        int p = Integer.parseInt(pField.getText());
+                        Point center = new Point();
+                        center.setCoordinateX(xCoordinate);
+                        center.setCoordinateY(yCoordinate);
+                        try {
+                            segment = controller.generateSecondOrderLine(modeName, center, p);
                             chart.setPoints(segment);
                             step = segment.size() - 1;
                         } catch (IncorrectDataException e) {
